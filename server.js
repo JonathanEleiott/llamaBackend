@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Parse CORS origins (supports comma-separated list)
-const allowedOrigins = ['https://llamatreatsbakery.com','http://localhost:5173','https://llamatreats.com','http://llamatreats.com'];
+const allowedOrigins = ['https://llamatreatsbakery.com','http://localhost:5173','https://llamatreats.com','http://llamatreats.com', 'https://llamabackend-production-d4b7.up.railway.app'];
 
 // CORS configuration
 const corsOptions = {
