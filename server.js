@@ -4,6 +4,7 @@ import cors from 'cors';
 import routers from './routers/index.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { testConnection } from './config/database.js';
+import { initDb } from './config/init-db.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -78,9 +79,12 @@ app.use(notFoundHandler);
 // Global error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(port, '0.0.0.0', () => {
-  console.log(`
+// Auto-init the database (schema + seed-if-empty) before accepting traffic.
+// On failure we log and start anyway so a transient DB issue doesn't crash-loop
+// the service — /api/health still reports DB status.
+const startServer = () =>
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`
 ╔═══════════════════════════════════════════════════╗
 ║                                                   ║
 ║   🦙 Llama Treats Bakery API Server               ║
@@ -91,6 +95,10 @@ app.listen(port, '0.0.0.0', () => {
 ║                                                   ║
 ╚═══════════════════════════════════════════════════╝
   `);
-});
+  });
+
+initDb()
+  .catch((err) => console.error('DB init failed (starting server anyway):', err))
+  .finally(startServer);
 
 export default app;
