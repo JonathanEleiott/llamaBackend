@@ -14,9 +14,12 @@ export async function initDb() {
   await query(schema);
   console.log('DB init: schema applied (idempotent).');
 
-  const { rows } = await query('SELECT COUNT(*)::int AS n FROM users');
+  // Gauge "already seeded" by products, not users: schema used to insert a
+  // placeholder admin, so a users-based check would never trigger. seed.js
+  // clears all tables (incl. that stale admin) before inserting real data.
+  const { rows } = await query('SELECT COUNT(*)::int AS n FROM products');
   if (rows[0].n > 0) {
-    console.log(`DB init: ${rows[0].n} users present — skipping seed.`);
+    console.log(`DB init: ${rows[0].n} products present — skipping seed.`);
     return;
   }
 

@@ -251,23 +251,6 @@ CREATE TRIGGER update_customers_updated_at BEFORE UPDATE ON customers FOR EACH R
 DROP TRIGGER IF EXISTS update_orders_updated_at ON orders;
 CREATE TRIGGER update_orders_updated_at BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- =====================================================
--- SEED DATA: Default admin user (password: admin123)
--- =====================================================
--- Note: In production, change this password immediately!
--- Password hash is for 'admin123' with bcrypt
-INSERT INTO users (email, password_hash, name, role)
-VALUES ('admin@llamatreats.com', '$2b$10$X7UrH5YxX5YxX5YxX5YxXOzRkZK5YxX5YxX5YxX5YxX5YxX5YxX5Y', 'Admin', 'admin')
-ON CONFLICT (email) DO NOTHING;
-
--- =====================================================
--- SEED DATA: Initial categories
--- =====================================================
-INSERT INTO categories (name, slug, description, display_order, active) VALUES
-('Cookies', 'cookies', 'Freshly baked cookies in various flavors', 1, true),
-('Cakes', 'cakes', 'Custom cakes for every occasion', 2, true),
-('Cupcakes', 'cupcakes', 'Delightful mini treats with amazing frosting', 3, true),
-('Pastries', 'pastries', 'Flaky, buttery pastries made fresh daily', 4, true),
-('Breads', 'breads', 'Artisan breads baked with love', 5, true),
-('Seasonal', 'seasonal', 'Limited time seasonal specials', 6, true)
-ON CONFLICT (slug) DO NOTHING;
+-- Seed data lives in config/seed.js (run on boot when the catalog is empty).
+-- Keep this file pure DDL: the old default-admin INSERT here carried a bogus
+-- password_hash that could never authenticate.
