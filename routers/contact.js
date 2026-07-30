@@ -15,17 +15,17 @@ const transporter = nodemailer.createTransport({
 
 router.post('/', asyncHandler(async (req, res) => {
   const { name, email, phone, subject, message } = req.body;
-  
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.MY_RECEIVER_EMAIL,
-    subject: `New Message from ${req.name}: ${req.subject}`,
+    subject: `New Message from ${name}: ${subject}`,
     text: `
-      Name: ${req.name}
-      Email: ${req.email}
-      Phone: ${req.phone}
+      Name: ${name}
+      Email: ${email}
+      Phone: ${phone}
 
-      Message: ${req.message}
+      Message: ${message}
     `,
   };
 
