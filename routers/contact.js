@@ -14,7 +14,8 @@ const transporter = nodemailer.createTransport({
 });
 
 router.post('/', asyncHandler(async (req, res) => {
-  console.log(`REQ:`, req)
+  const { name, email, phone, subject, message } = req.body;
+  
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.MY_RECEIVER_EMAIL,
