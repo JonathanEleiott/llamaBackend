@@ -10,6 +10,7 @@ import bannersRouter from './banners.js';
 import settingsRouter from './settings.js';
 import uploadRouter from './upload.js';
 import checkoutRouter from './checkout.js';
+import contactRouter from './contact.js'
 
 const router = express.Router();
 
@@ -35,5 +36,8 @@ router.use('/upload', uploadRouter);
 
 // Checkout routes
 router.use('/checkout', checkoutRouter);
+
+// Contact routes
+router.use('/contact', contactRouter);
 
 export default router;
