@@ -16,7 +16,12 @@
     "db:reset": "psql -d llama_bakery -f ./config/schema.sql && node config/seed.js",
     "test": "echo \"No tests specified\" && exit 0"
   },
-  "keywords": ["bakery", "api", "express", "postgresql"],
+  "keywords": [
+    "bakery",
+    "api",
+    "express",
+    "postgresql"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -28,6 +33,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
+    "nodemailer": "^9.0.3",
     "pg": "^8.16.3",
     "stripe": "^20.0.0",
     "uuid": "^13.0.0"

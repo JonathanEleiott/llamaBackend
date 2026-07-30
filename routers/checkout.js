@@ -2,8 +2,35 @@ import express from 'express';
 import Stripe from 'stripe';
 import { query, getClient } from '../config/database.js';
 import { asyncHandler, AppError } from '../middleware/errorHandler.js';
+import nodemailer from 'nodemailer';
 
 const router = express.Router();
+
+// Create the transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Trigger this function on successful order processing
+const sendOrderAlert = async(orderDetails) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.MY_RECEIVER_EMAIL,
+    subject: `New Successful Order! #${orderDetails.id}`,
+    text: `An order was successfully placed for $${orderDetails.total}.`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Order notification sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -343,6 +370,8 @@ router.post('/confirm-order', asyncHandler(async (req, res) => {
     }
 
     await client.query('COMMIT');
+
+    sendOrderAlert(order);
 
     res.status(201).json({
       message: 'Order created successfully',
