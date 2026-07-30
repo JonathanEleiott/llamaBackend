@@ -1,5 +1,6 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
+import { asyncHandler } from '../middleware/errorHandler.js';
 
 const router = express.Router();
 
