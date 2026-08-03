@@ -127,7 +127,7 @@ router.post('/validate-code', asyncHandler(async (req, res) => {
   if (special.min_purchase && subtotal < special.min_purchase) {
     return res.status(400).json({
       valid: false,
-      error: `Minimum purchase of $${special.min_purchase.toFixed(2)} required`,
+      error: `Minimum purchase of $${Number(special.min_purchase).toFixed(2)} required`,
     });
   }
 
