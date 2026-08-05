@@ -93,7 +93,7 @@ router.post('/create-session', asyncHandler(async (req, res) => {
   // Convert discount to cents
   const discountCents = Math.round(discountAmount * 100);
 
-  // Calculate tax at 8.5% (on subtotal after discount)
+  // Calculate tax at 7% (on subtotal after discount)
   const taxRate = 0.007;
   const taxableAmount = subtotalCents - discountCents;
   const taxCents = Math.round(taxableAmount * taxRate);
@@ -120,7 +120,7 @@ router.post('/create-session', asyncHandler(async (req, res) => {
       price_data: {
         currency: 'usd',
         product_data: {
-          name: 'Sales Tax (8.5%)',
+          name: 'Sales Tax (7%)',
         },
         unit_amount: taxCents,
       },
