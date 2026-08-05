@@ -83,7 +83,7 @@ router.post('/create-session', asyncHandler(async (req, res) => {
   }
 
   // Calculate delivery fee if applicable
-  const deliveryFee = customerInfo?.orderType === 'delivery' ? 500 : 0; // 500 cents = $5.00
+  const deliveryFee = customerInfo?.orderType === 'delivery' ? 1000 : 0; // 1000 cents = $10.00
 
   // Calculate subtotal for tax (before discount)
   const subtotalCents = items.reduce((sum, item) => {
