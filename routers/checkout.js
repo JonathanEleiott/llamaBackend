@@ -94,7 +94,7 @@ router.post('/create-session', asyncHandler(async (req, res) => {
   const discountCents = Math.round(discountAmount * 100);
 
   // Calculate tax at 8.5% (on subtotal after discount)
-  const taxRate = 0.085;
+  const taxRate = 0.007;
   const taxableAmount = subtotalCents - discountCents;
   const taxCents = Math.round(taxableAmount * taxRate);
 
