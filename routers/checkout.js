@@ -95,7 +95,7 @@ router.post('/create-session', asyncHandler(async (req, res) => {
 
   // Calculate tax at 7% (on subtotal after discount)
   const taxRate = 0.07;
-  const taxableAmount = subtotalCents - discountCents;
+  const taxableAmount = subtotalCents;
   const taxCents = Math.round(taxableAmount * taxRate);
 
   // Create line items for Stripe
