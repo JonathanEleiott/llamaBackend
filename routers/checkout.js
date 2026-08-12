@@ -22,7 +22,7 @@ const sendOrderAlert = async(orderDetails) => {
     from: process.env.EMAIL_USER,
     to: process.env.MY_RECEIVER_EMAIL,
     subject: `New Successful Order! #${orderDetails.id}`,
-    text: `${orderDetails.customer_name} placed an order for $${orderDetails.total}. ${orderDetails.delivery_address ? `They would like it delivered to ${orderDetails.delivery_address?.address}, ${orderDetails.delivery_address?.city}, ${orderDetails.delivery_address?.state} ${orderDetails.delivery_address?.zipCode}.` : ``}}`,
+    text: `${orderDetails.customer_name} placed an order for $${orderDetails.total}. ${orderDetails.delivery_address?.address ? `They would like it delivered to ${orderDetails.delivery_address?.address}, ${orderDetails.delivery_address?.city}, ${orderDetails.delivery_address?.state} ${orderDetails.delivery_address?.zipCode}.` : ``}`,
   };
 
   try {
