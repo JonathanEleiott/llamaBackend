@@ -17,11 +17,12 @@ const transporter = nodemailer.createTransport({
 
 // Trigger this function on successful order processing
 const sendOrderAlert = async(orderDetails) => {
+  console.log(orderDetails);
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.MY_RECEIVER_EMAIL,
     subject: `New Successful Order! #${orderDetails.id}`,
-    text: `An order was successfully placed for $${orderDetails.total}.`,
+    text: `${orderDetails.customer_name} placed an order for $${orderDetails.total}. ${orderDetails.delivery_address ? `They would like it delivered to ${orderDetails.delivery_address?.address}, ${orderDetails.delivery_address?.city}, ${orderDetails.delivery_address?.state} ${orderDetails.delivery_address?.zipCode}.` : ``}}`,
   };
 
   try {
