@@ -77,6 +77,10 @@ CREATE TABLE IF NOT EXISTS specials (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Safe migration for already-deployed databases. Existing specials remain public.
+ALTER TABLE specials
+    ADD COLUMN IF NOT EXISTS is_private BOOLEAN NOT NULL DEFAULT false;
+
 -- =====================================================
 -- PROMOTIONS TABLE (Marketing banners/content)
 -- =====================================================

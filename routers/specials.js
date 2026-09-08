@@ -18,7 +18,7 @@ router.get('/', optionalAuth, asyncHandler(async (req, res) => {
 
   // For public users, only show active specials within date range
   if (!isAdmin) {
-    queryText += ` AND active = true AND start_date <= NOW() AND end_date >= NOW()`;
+    queryText += ` AND active = true AND is_private = false AND start_date <= NOW() AND end_date >= NOW()`;
   } else {
     if (active !== undefined) {
       queryText += ` AND active = $${paramCount}`;
@@ -65,7 +65,7 @@ router.get('/:id', optionalAuth, asyncHandler(async (req, res) => {
   let queryText = 'SELECT * FROM specials WHERE id = $1';
 
   if (!isAdmin) {
-    queryText += ' AND active = true AND start_date <= NOW() AND end_date >= NOW()';
+    queryText += ' AND active = true AND is_private = false AND start_date <= NOW() AND end_date >= NOW()';
   }
 
   const result = await query(queryText, [id]);
@@ -355,6 +355,7 @@ router.post('/', authenticate, authorize('admin', 'staff'), uploadSingle, handle
     start_date,
     end_date,
     active = true,
+    is_private,
     min_purchase,
     max_uses,
     code,
@@ -362,6 +363,10 @@ router.post('/', authenticate, authorize('admin', 'staff'), uploadSingle, handle
 
   if (!name || !type || !value || !start_date || !end_date) {
     throw new AppError('Name, type, value, start_date, and end_date are required', 400);
+  }
+
+  if (is_private !== undefined && req.user.role !== 'admin') {
+    throw new AppError('Only administrators can set a special\'s privacy', 403);
   }
 
   // Promo code is required for all specials
@@ -396,8 +401,8 @@ router.post('/', authenticate, authorize('admin', 'staff'), uploadSingle, handle
   const parsedValue = typeof value === 'string' ? JSON.parse(value) : value;
 
   const result = await query(
-    `INSERT INTO specials (name, description, type, value, product_ids, category_ids, start_date, end_date, active, min_purchase, max_uses, code, image)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    `INSERT INTO specials (name, description, type, value, product_ids, category_ids, start_date, end_date, active, is_private, min_purchase, max_uses, code, image)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
      RETURNING *`,
     [
       name,
@@ -409,6 +414,7 @@ router.post('/', authenticate, authorize('admin', 'staff'), uploadSingle, handle
       start_date,
       end_date,
       active === 'true' || active === true,
+      req.user.role === 'admin' && (is_private === 'true' || is_private === true),
       min_purchase ? parseFloat(min_purchase) : null,
       max_uses ? parseInt(max_uses) : null,
       code ? code.toUpperCase() : null,
@@ -435,6 +441,7 @@ router.put('/:id', authenticate, authorize('admin', 'staff'), uploadSingle, hand
     start_date,
     end_date,
     active,
+    is_private,
     min_purchase,
     max_uses,
     code,
@@ -512,6 +519,16 @@ router.put('/:id', authenticate, authorize('admin', 'staff'), uploadSingle, hand
   if (active !== undefined) {
     updates.push(`active = $${paramCount}`);
     values.push(active === 'true' || active === true);
+    paramCount++;
+  }
+
+  // Privacy is an administrator-only setting. Staff may manage all other special fields.
+  if (is_private !== undefined) {
+    if (req.user.role !== 'admin') {
+      throw new AppError('Only administrators can change a special\'s privacy', 403);
+    }
+    updates.push(`is_private = $${paramCount}`);
+    values.push(is_private === 'true' || is_private === true);
     paramCount++;
   }
 
