@@ -201,7 +201,7 @@ router.post('/', asyncHandler(async (req, res) => {
 // =====================================================
 
 // Get all orders (admin/staff only)
-router.get('/', authenticate, asyncHandler(async (req, res) => {
+router.get('/', authenticate, authorize('admin', 'staff'), asyncHandler(async (req, res) => {
   const { status, page = 1, limit = 20 } = req.query;
   const offset = (page - 1) * limit;
 
@@ -269,7 +269,7 @@ router.get('/', authenticate, asyncHandler(async (req, res) => {
 }));
 
 // Get single order by ID (admin/staff only)
-router.get('/:id', authenticate, asyncHandler(async (req, res) => {
+router.get('/:id', authenticate, authorize('admin', 'staff'), asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const result = await query(
@@ -320,7 +320,7 @@ router.get('/:id', authenticate, asyncHandler(async (req, res) => {
 }));
 
 // Update order status (admin/staff only)
-router.patch('/:id/status', authenticate, asyncHandler(async (req, res) => {
+router.patch('/:id/status', authenticate, authorize('admin', 'staff'), asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
