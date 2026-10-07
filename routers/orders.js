@@ -256,6 +256,7 @@ router.get('/', authenticate, authorize('admin', 'staff'), asyncHandler(async (r
     items: order.items[0]?.id ? order.items : [],
     createdAt: order.created_at,
     deliveryAddress: order.delivery_address,
+    notes: order.notes,
   }));
 
   res.json({
