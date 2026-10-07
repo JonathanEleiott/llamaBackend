@@ -112,9 +112,6 @@ router.post('/', asyncHandler(async (req, res) => {
     customerId,
   } = req.body;
 
-  console.log(`CUSTOMER INFO:`, customerInfo);
-  console.log(`NOTES:`, notes);
-
   if (!items || items.length === 0) {
     throw new AppError('Order must contain at least one item', 400);
   }
