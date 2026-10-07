@@ -287,6 +287,8 @@ router.post('/confirm-order', asyncHandler(async (req, res) => {
   const deliveryAddress = metadata.deliveryAddress ? JSON.parse(metadata.deliveryAddress) : null;
   const notes = metadata.notes;
 
+  console.log(`NOTES:`, notes);
+
   // Extract totals from Stripe line items
   const stripeLineItems = session.line_items?.data || [];
   let subtotalCents = 0;
@@ -332,7 +334,7 @@ router.post('/confirm-order', asyncHandler(async (req, res) => {
         fulfillment_type, pickup_time, delivery_address,
         customer_name, customer_email, customer_phone, notes,
         stripe_session_id, stripe_payment_intent
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       RETURNING *`,
       [
         orderCustomerId,
