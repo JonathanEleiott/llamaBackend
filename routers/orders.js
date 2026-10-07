@@ -157,7 +157,7 @@ router.post('/', asyncHandler(async (req, res) => {
         customerInfo.name,
         customerInfo.email,
         customerInfo.phone || null,
-        notes || customerInfo.deliveryInstructions || null,
+        notes || null,
         stripeSessionId || null,
       ]
     );

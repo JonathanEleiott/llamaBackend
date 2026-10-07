@@ -54,7 +54,7 @@ const generateOrderNumber = () => {
 
 // Create Stripe Checkout Session
 router.post('/create-session', asyncHandler(async (req, res) => {
-  const { items } = req.body;
+  const { items, notes } = req.body;
   // Handle both snake_case and camelCase from frontend
   const rawCustomerInfo = req.body.customer_info || req.body.customerInfo || {};
   const promoCode = req.body.promo_code || req.body.promoCode || null;
@@ -76,7 +76,6 @@ router.post('/create-session', asyncHandler(async (req, res) => {
     city: rawCustomerInfo.city,
     state: rawCustomerInfo.state,
     zipCode: rawCustomerInfo.zip_code || rawCustomerInfo.zipCode,
-    deliveryInstructions: rawCustomerInfo.delivery_instructions || rawCustomerInfo.deliveryInstructions,
   };
 
   if (!items || items.length === 0) {
@@ -194,8 +193,8 @@ router.post('/create-session', asyncHandler(async (req, res) => {
       city: customerInfo.city,
       state: customerInfo.state,
       zipCode: customerInfo.zipCode,
-      instructions: customerInfo.deliveryInstructions,
     });
+    orderMetadata.notes = notes;
   }
 
   // Create Checkout Session
