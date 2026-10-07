@@ -179,6 +179,8 @@ router.post('/', asyncHandler(async (req, res) => {
 
     await client.query('COMMIT');
 
+    console.log(`ORDER CREATED SUCCESSFULLY:`, order);
+
     res.status(201).json({
       message: 'Order created successfully',
       order: {
@@ -190,6 +192,7 @@ router.post('/', asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await client.query('ROLLBACK');
+    console.log(`ERROR:`, error);
     throw error;
   } finally {
     client.release();
