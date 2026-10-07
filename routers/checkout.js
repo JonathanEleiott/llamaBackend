@@ -185,7 +185,7 @@ router.post('/create-session', asyncHandler(async (req, res) => {
   if (customerInfo?.orderType === 'pickup') {
     orderMetadata.pickupDate = customerInfo.pickupDate || '';
     orderMetadata.pickupTime = customerInfo.pickupTime || '';
-  } else if (customerInfo?.orderType === 'delivery') {
+  } else {
     orderMetadata.deliveryAddress = JSON.stringify({
       firstName: customerInfo.firstName,
       lastName: customerInfo.lastName,
