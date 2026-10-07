@@ -172,6 +172,14 @@ CREATE TABLE IF NOT EXISTS orders (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Safe migration for existing databases: replace the fulfillment type check
+-- without changing or deleting any order rows.
+ALTER TABLE orders
+    DROP CONSTRAINT IF EXISTS orders_fulfillment_type_check;
+ALTER TABLE orders
+    ADD CONSTRAINT orders_fulfillment_type_check
+    CHECK (fulfillment_type IN ('pickup', 'delivery', 'Free Delivery'));
+
 -- =====================================================
 -- ORDER_ITEMS TABLE (Items within an order)
 -- =====================================================
